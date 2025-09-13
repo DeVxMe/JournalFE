@@ -3,7 +3,6 @@ src/context
 src/hooks
 src/lib
 src/pages
-src/types
 
 # Logs
 logs
