@@ -1,7 +1,6 @@
 src/components
 src/context
-src/hooks
-src/lib
+
 src/pages
 
 # Logs
