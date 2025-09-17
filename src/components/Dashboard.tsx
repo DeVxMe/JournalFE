@@ -4,33 +4,81 @@ import { useState, useEffect } from 'react';
 import { JournalList } from './JournalList';
 import { CreateJournalForm } from './CreateJournalForm';
 import { Button } from './ui/button';
-import { Plus, Book, User, LogOut } from 'lucide-react';
+import { Plus, Book, User, LogOut, Loader2 } from 'lucide-react';
 import { WalletButton } from './WalletButton';
+import { useJournalProgram } from '../hooks/useJournalProgram';
+import { useToast } from './ui/use-toast';
 import type { JournalEntry } from '../types/journal';
 
 export const Dashboard = () => {
   const { connected, disconnect, publicKey } = useWallet();
+  const { fetchJournalEntries, deleteJournalEntry } = useJournalProgram();
+  const { toast } = useToast();
   const [journals, setJournals] = useState<JournalEntry[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // If wallet is not connected, this component shouldn't render
   if (!connected || !publicKey) {
     return null;
   }
 
+  useEffect(() => {
+    loadJournals();
+  }, [connected, publicKey]);
+
+  const loadJournals = async () => {
+    try {
+      setLoading(true);
+      const entries = await fetchJournalEntries();
+      setJournals(entries);
+    } catch (error) {
+      console.error('Error loading journals:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load journal entries",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreateJournal = (journal: JournalEntry) => {
     setJournals(prev => [journal, ...prev]);
     setShowCreateForm(false);
+    toast({
+      title: "Success",
+      description: "Journal entry created successfully",
+    });
   };
 
-  const handleDeleteJournal = (title: string) => {
-    setJournals(prev => prev.filter(j => j.title !== title));
+  const handleDeleteJournal = async (title: string) => {
+    try {
+      await deleteJournalEntry(title);
+      setJournals(prev => prev.filter(j => j.title !== title));
+      toast({
+        title: "Success",
+        description: "Journal entry deleted successfully",
+      });
+    } catch (error) {
+      console.error('Error deleting journal:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete journal entry",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleUpdateJournal = (updatedJournal: JournalEntry) => {
     setJournals(prev => 
       prev.map(j => j.title === updatedJournal.title ? updatedJournal : j)
     );
+    toast({
+      title: "Success",
+      description: "Journal entry updated successfully",
+    });
   };
 
   return (
@@ -82,9 +130,11 @@ export const Dashboard = () => {
             <div>
               <h1 className="text-3xl font-bold mb-2">Your Journals</h1>
               <p className="text-text-secondary">
-                {journals.length === 0 
-                  ? "Start your on-chain journaling journey" 
-                  : `${journals.length} ${journals.length === 1 ? 'entry' : 'entries'} stored on Solana`
+                {loading 
+                  ? "Loading your entries..." 
+                  : journals.length === 0 
+                    ? "Start your on-chain journaling journey" 
+                    : `${journals.length} ${journals.length === 1 ? 'entry' : 'entries'} stored on Solana`
                 }
               </p>
             </div>
@@ -94,6 +144,7 @@ export const Dashboard = () => {
               size="lg"
               onClick={() => setShowCreateForm(true)}
               className="shadow-glow"
+              disabled={loading}
             >
               <Plus className="h-5 w-5" />
               New Entry
@@ -125,15 +176,25 @@ export const Dashboard = () => {
             </motion.div>
           )}
 
+          {/* Loading State */}
+          {loading && (
+            <div className="flex justify-center items-center py-16">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="ml-2 text-text-secondary">Loading journal entries...</span>
+            </div>
+          )}
+
           {/* Journal List */}
-          <JournalList 
-            journals={journals}
-            onDelete={handleDeleteJournal}
-            onUpdate={handleUpdateJournal}
-          />
+          {!loading && (
+            <JournalList 
+              journals={journals}
+              onDelete={handleDeleteJournal}
+              onUpdate={handleUpdateJournal}
+            />
+          )}
 
           {/* Empty State */}
-          {journals.length === 0 && !showCreateForm && (
+          {!loading && journals.length === 0 && !showCreateForm && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

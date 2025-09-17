@@ -6,6 +6,8 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Card } from './ui/card';
 import { X, Save, BookOpen } from 'lucide-react';
+import { useJournalProgram } from '../hooks/useJournalProgram';
+import { useToast } from './ui/use-toast';
 import type { JournalEntry } from '../types/journal';
 
 interface CreateJournalFormProps {
@@ -15,6 +17,8 @@ interface CreateJournalFormProps {
 
 export const CreateJournalForm = ({ onSubmit, onCancel }: CreateJournalFormProps) => {
   const { publicKey } = useWallet();
+  const { createJournalEntry } = useJournalProgram();
+  const { toast } = useToast();
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,18 +30,24 @@ export const CreateJournalForm = ({ onSubmit, onCancel }: CreateJournalFormProps
     setIsSubmitting(true);
     
     try {
-      // TODO: Integrate with Anchor program
-      // For now, we'll create a local journal entry
+      await createJournalEntry(title.trim(), message.trim());
+      
       const journal: JournalEntry = {
         title: title.trim(),
         message: message.trim(),
         owner: publicKey,
         createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
       onSubmit(journal);
     } catch (error) {
       console.error('Error creating journal:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create journal entry. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }

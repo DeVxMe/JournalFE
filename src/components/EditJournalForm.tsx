@@ -5,6 +5,8 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Card } from './ui/card';
 import { X, Save, Edit } from 'lucide-react';
+import { useJournalProgram } from '../hooks/useJournalProgram';
+import { useToast } from './ui/use-toast';
 import type { JournalEntry } from '../types/journal';
 
 interface EditJournalFormProps {
@@ -14,6 +16,8 @@ interface EditJournalFormProps {
 }
 
 export const EditJournalForm = ({ journal, onSubmit, onCancel }: EditJournalFormProps) => {
+  const { updateJournalEntry } = useJournalProgram();
+  const { toast } = useToast();
   const [title, setTitle] = useState(journal.title);
   const [message, setMessage] = useState(journal.message);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,7 +29,8 @@ export const EditJournalForm = ({ journal, onSubmit, onCancel }: EditJournalForm
     setIsSubmitting(true);
     
     try {
-      // TODO: Integrate with Anchor program for updates
+      await updateJournalEntry(title.trim(), message.trim());
+      
       const updatedJournal: JournalEntry = {
         ...journal,
         title: title.trim(),
@@ -36,6 +41,11 @@ export const EditJournalForm = ({ journal, onSubmit, onCancel }: EditJournalForm
       onSubmit(updatedJournal);
     } catch (error) {
       console.error('Error updating journal:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update journal entry. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
