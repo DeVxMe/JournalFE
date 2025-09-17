@@ -1,54 +1,73 @@
-# JournalFE
+# Welcome to your Lovable project
 
-Front-end for the Journal Application
+## Project info
 
-## Table of Contents
+**URL**: https://lovable.dev/projects/180842dd-71a4-4c9d-93db-87b398df6a5d
 
-- [About](#about)  
-- [Features](#features)  
-- [Tech Stack](#tech-stack)  
-- [Getting Started](#getting-started)  
-  - [Prerequisites](#prerequisites)  
-  - [Installation](#installation)  
-  - [Development](#development)  
-  - [Build & Deployment](#build--deployment)  
-- [Project Structure](#project-structure)  
-- [Configuration](#configuration)  
-- [Contributing](#contributing)  
-- [License](#license)  
+## How can I edit this code?
 
-## About
+There are several ways of editing your application.
 
-JournalFE is the front-end application for the Journal system. It’s built using modern web technologies to provide a fast, responsive, and user-friendly UI for creating, editing, viewing, and managing journal entries.
+**Use Lovable**
 
-## Features
+Simply visit the [Lovable Project](https://lovable.dev/projects/180842dd-71a4-4c9d-93db-87b398df6a5d) and start prompting.
 
-- Create, read, update, and delete (CRUD) journal entries  
-- Rich text or simple text input (whichever is implemented)  
-- Responsive design for desktop and mobile  
-- Theming / styling with TailwindCSS (or other)  
-- Fast development workflow with hot-reload / Vite (or other tools)  
+Changes made via Lovable will be committed automatically to this repo.
 
-## Tech Stack
+**Use your preferred IDE**
 
-- [React](https://reactjs.org/) (with TypeScript)  
-- [Vite](https://vitejs.dev/) as build tool / dev server  
-- [Tailwind CSS](https://tailwindcss.com/) for styling  
-- shadcn-ui (or UI component library used)  
-- ESLint, Prettier for code quality  
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 
-## Getting Started
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-### Prerequisites
+Follow these steps:
 
-Make sure you have the following installed:
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
 
-- [Node.js](https://nodejs.org/) (version ≥ 18.x recommended)  
-- npm or yarn (npm comes with Node; alternatively yarn)  
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
 
-### Installation
+# Step 3: Install the necessary dependencies.
+npm i
 
-1. Clone the repo  
-   ```bash
-   git clone https://github.com/DeVxMe/JournalFE.git
-   cd JournalFE
+# Step 4: Start the development server with auto-reloading and an instant preview.
+npm run dev
+```
+
+**Edit a file directly in GitHub**
+
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
+
+**Use GitHub Codespaces**
+
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
+
+## What technologies are used for this project?
+
+This project is built with:
+
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+
+## How can I deploy this project?
+
+Simply open [Lovable](https://lovable.dev/projects/180842dd-71a4-4c9d-93db-87b398df6a5d) and click on Share -> Publish.
+
+## Can I connect a custom domain to my Lovable project?
+
+Yes, you can!
+
+To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+
+Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
